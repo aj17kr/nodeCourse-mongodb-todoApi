@@ -18,18 +18,49 @@ const myDB=db.db('TodoApp');
 // });
 
 //counting only with rob name document aka rows
-myDB.collection('Users').count().then((count)=>{
-	console.log("Todos count with rob name is :",count);
-},(err)=>{
-	console.log("Unable to fetch todos",err);
-});
+//USING PROMISES, count will return number of affected document aka row/record.
+// myDB.collection('Users').find({name:"man"}).count().then((count)=>{
+// 	console.log("Todos count with man name is :",count);
+// },(err)=>{
+// 	console.log("Unable to fetch todos",err);
+// });
 
-//printing only with rob name document aka rows
-// myDB.collection('Users').find({name:"rob"}).toArray().then((docs)=>{
+//USING CALLBACK
+// myDB.collection('Users').find({name:"man"}).count((err,count)=>{
+// 	if(err){return console.log("Unable to fetch todos",err);}
+// 	console.log("Todos count with man name is :",count);
+// });
+
+
+// >USING PROMISES,Find All using find
+// myDB.collection('Users').find({}).toArray().then((docs)=>{
 // 	console.log(docs)	;
 // },(err)=>{
 // 	console.log("Unable to fetch todos",err);
 // });
+
+//USING PROMISES,Find only one using findOne
+// myDB.collection('Users').findOne({}).then((docs)=>{
+// 	console.log(docs);
+// },(err)=>{
+// 	console.log("Unable to fetch todos",err);
+// });
+
+//USING CALLBACK FUNCTION, Find Once
+// myDB.collection('Users').findOne({},(err,result)=>{
+// 		if (err){
+// 		return console.log("Unable to fetch data",err);
+// 	}
+// 	console.log(result)
+// })
+
+//USING CALLBACK FUNCTION,FindAll,using regular expression ,find with starting s string.
+myDB.collection('Todos').find({text:/^S/}).toArray((err,result)=>{
+	if (err){
+		return console.log("Unable to fetch data",err);
+	}
+	console.log(result);
+})
 
 db.close();
 });
