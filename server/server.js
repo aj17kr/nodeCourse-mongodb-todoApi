@@ -13,6 +13,7 @@ app.get('/',(req,res)=>{
   res.send("hello");
 })
 
+//Post Todo Route
 app.post('/todos',(req,res)=>{
   var todo=new Todo({
     text:req.body.text
@@ -21,6 +22,15 @@ app.post('/todos',(req,res)=>{
     res.send(doc);
   },(err)=>{
     res.status(400).send(err);
+  });
+});
+
+//Get Todo Route
+app.get('/todos',(req,res)=>{
+  Todo.find().then((todos)=>{
+    res.send({todos});
+  },(err)=>{
+    res.status(400).send(err)
   });
 });
 
