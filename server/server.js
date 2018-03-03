@@ -57,7 +57,7 @@ app.get('/todos/:id',(req,res)=>{
 
 /* ===============Starting Express Server================ */
 //Dynamic port is used alongwith 3000 port, if used in heroku dynamic assigned port is used ,Locally 3000 port is used.
-let port=process.env.PORT | 3000;
+let port=process.env.PORT || 3000;
 app.listen(port,()=>{
   console.log(`Started on port ${port}`);
 });
