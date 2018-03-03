@@ -14,7 +14,7 @@ app.get('/',(req,res)=>{
   res.send("hello");
 })
 
-//Post Todo Route
+// ============POST Todo Route ================ //
 app.post('/todos',(req,res)=>{
   var todo=new Todo({
     text:req.body.text
@@ -26,7 +26,7 @@ app.post('/todos',(req,res)=>{
   });
 });
 
-//Get Todo Route
+// ============GET Todo Route ================ //
 app.get('/todos',(req,res)=>{
   Todo.find().then((todos)=>{
     res.send({todos});
@@ -35,7 +35,7 @@ app.get('/todos',(req,res)=>{
   });
 });
 
-// Get Todo when user inputs value.
+// ============Get Todo when user inputs ID in URL. =========== //
 app.get('/todos/:id',(req,res)=>{
   let id=req.params.id;
 
