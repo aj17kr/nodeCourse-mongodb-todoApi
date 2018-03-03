@@ -3,8 +3,9 @@ const request=require("supertest");
 
 const {app}=require('./../server');
 const {Todo}=require('./../models/todo');
+var {ObjectID}=require("mongodb");
 
-let todos=[{text:"first text todo"},{text:"second text todo"}];
+let todos=[{text:"first text todo",_id:new ObjectID()},{text:"second text todo",_id:new ObjectID()}];
 
 beforeEach((done)=>{
   Todo.remove({}).then(()=>{
@@ -68,4 +69,32 @@ describe("GET /Todos",()=>{
     })
     .end(done);
     });
+  });
+
+  //Describe for GET /todos/:id
+  describe("GET /todos/:id",()=>{
+    it("should return todo/:id if todo found",(done)=>{
+      request(app)
+      .get(`/todos/${todos[0]._id.toHexString()}`)
+      .expect(200)
+      .expect((res)=>{
+        expect(res.body.todo.text).toBe(todos[0].text);
+      })
+      .end(done)
+    });
+
+      it('should return 404 error if todo not found',(done)=>{
+        request(app)
+        .get(`/todos/${(new ObjectID).toHexString()}`)
+        .expect(404)
+        .end(done);
+      })
+
+      it('should return 404 for non objectIDs',(done)=>{
+        request(app)
+        .get(`/todo/1234`)
+        .expect(404)
+        .end(done);
+      });
+
   });
