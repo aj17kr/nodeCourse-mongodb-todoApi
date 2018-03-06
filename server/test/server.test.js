@@ -5,7 +5,15 @@ const {app}=require('./../server');
 const {Todo}=require('./../models/todo');
 var {ObjectID}=require("mongodb");
 
-let todos=[{text:"first text todo",_id:new ObjectID()},{text:"second text todo",_id:new ObjectID()}];
+let todos=[
+  {
+  _id:new ObjectID(),text:"first text todo"
+},{
+  _id:new ObjectID(),
+  text:"second text todo",
+  completed:true,
+  completedAt:333
+}];
 
 beforeEach((done)=>{
   Todo.remove({}).then(()=>{
@@ -13,6 +21,8 @@ beforeEach((done)=>{
   }).then(()=>done());
 });
 
+
+// ============Describe Method for post /todos ================= //
 describe("POST /todos",()=>{
 
 //Should add new todo
@@ -136,7 +146,42 @@ describe("GET /Todos",()=>{
       .expect(404)
       .end(done);
     });
-
-
-
   });
+
+    //Describe for Update /todos/:id
+    describe("Update todo  /todos/:id",()=>{
+
+      it('should update todo with completed-true',(done)=>{
+        let hexId=todos[0]._id.toHexString();
+        let changedValues={text:"from test",completed:true};
+
+        request(app)
+        .patch(`/todos/${hexId}`)
+        .send(changedValues)
+        .expect(200)
+        .expect((res)=>{
+          expect(res.body.todo.text).toBe(changedValues.text);
+          expect(res.body.todo.complete).toBe(changedValues.complete);
+          expect(res.body.todo.completedAt).toBeA("number");
+        })
+        .end(done);
+    });
+
+    it('should update todo with completed-false',(done)=>{
+      let hexId=todos[1]._id.toHexString();
+      let changedValues={text:"from test again",completed:false};
+
+      request(app)
+      .patch(`/todos/${hexId}`)
+      .send(changedValues)
+      .expect(200)
+      .expect((res)=>{
+        expect(res.body.todo.text).toBe(changedValues.text);
+        expect(res.body.todo.complete).toBe(changedValues.complete);
+        expect(res.body.todo.completedAt).toNotExist();
+      })
+      .end(done);
+  });
+
+
+});
