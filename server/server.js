@@ -1,9 +1,9 @@
-require('./config/config');
 const express=require('express');
 const bodyParser=require('body-parser');
 const _ = require('lodash');
 const {ObjectID}=require("mongodb");
 
+require('./config/config');
 var {mongoose}=require('./db/mongoose');
 var {Todo}=require('./models/todo');
 var {Users}=require('./models/users');
@@ -108,8 +108,10 @@ app.patch('/todos/:id',(req,res)=>{
 /* ===============Starting Express Server================ */
 //Dynamic port is used alongwith 3000 port, if used in heroku dynamic assigned port is used ,Locally 3000 port is used.
 let port=process.env.PORT;
+let uri=process.env.MONGODB_URI;
 app.listen(port,()=>{
-  console.log(`Started on port ${port}`);
+  console.log(`Started on port ${port + uri}`);
+
 });
 
 module.exports={app};
